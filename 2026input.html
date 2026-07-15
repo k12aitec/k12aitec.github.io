@@ -439,7 +439,7 @@
 
       const validEntries = parsedEntries.filter(e => e.valid).map(e => ({
         name: e.name,
-        phone: e.phone
+        phone: e.phone.slice(-4)
       }));
 
       if (validEntries.length === 0) {

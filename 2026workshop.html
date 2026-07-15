@@ -1608,7 +1608,7 @@
               const key = `${record.workshopId}-${record.session}`;
               selectionCounts[key] = (selectionCounts[key] || 0) + 1;
 
-              const phone = String(record.phone || '').trim();
+              const phone = String(record.phone || '').trim().slice(-4);
               const session = parseInt(record.session, 10);
               if (phone && session) {
                 if (!existingUserSelections[phone]) existingUserSelections[phone] = {};
@@ -1634,10 +1634,11 @@
     }
 
     function verifyUser(name, phone) {
+      const inputPhone = String(phone || '').trim().slice(-4);
       return registeredUsers.some(u => {
         const uName = (u.name || '').trim();
-        const uPhone = (u.phone || '').trim();
-        return uName === name.trim() && uPhone === phone.trim();
+        const uPhone = String(u.phone || '').trim().slice(-4);
+        return uName === name.trim() && uPhone === inputPhone;
       });
     }
 
@@ -1731,7 +1732,9 @@
           return;
         }
 
-        if (existingUserSelections[phone] && existingUserSelections[phone][session]) {
+        const phoneShort = phone.slice(-4);
+
+        if (existingUserSelections[phoneShort] && existingUserSelections[phoneShort][session]) {
           showVerifyStatus('error', `您已经提交过第 ${session} 场的选课，不能重复提交。`);
           submitBtn.disabled = false;
           submitBtn.textContent = '验证并提交';
@@ -1740,7 +1743,7 @@
 
         const payload = {
           name,
-          phone,
+          phone: phoneShort,
           session,
           workshopId: selections[session].id,
           workshopName: selections[session].name,
@@ -1755,8 +1758,8 @@
 
         if (response.ok) {
           submittedSessions[session] = true;
-          if (!existingUserSelections[phone]) existingUserSelections[phone] = {};
-          existingUserSelections[phone][session] = selections[session].id;
+          if (!existingUserSelections[phoneShort]) existingUserSelections[phoneShort] = {};
+          existingUserSelections[phoneShort][session] = selections[session].id;
           rememberedUser = { name, phone };
           localStorage.setItem('workshop_user_name', name);
           localStorage.setItem('workshop_user_phone', phone);
