@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>第三届人工智能与科技教育大会工作坊报名系统</title>
+  <title>“智教浦江 2026 ”人工智能教育实践创新论坛、 第三届中小学人工智能与科技教育大会工作坊报名系统</title>
   <meta name="description" content="第三届人工智能与科技教育大会工作坊报名系统，支持三场工作坊选课、身份验证与在线提交。">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,6 +37,29 @@
       color: #ffd6f5;
       background: rgba(255, 78, 205, 0.18);
       border: 1px solid rgba(255, 78, 205, 0.4);
+    }
+
+    .workshop-hero .hero-content {
+      margin: 0 auto;
+      text-align: center;
+      max-width: 1100px;
+    }
+
+    .workshop-hero h1 {
+      font-size: clamp(1.75rem, 4vw, 2.75rem);
+      margin-bottom: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .workshop-hero h1 {
+        white-space: nowrap;
+      }
+    }
+
+    .workshop-hero .hero-subtitle {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 720px;
     }
 
     .intro-cards {
@@ -530,45 +553,12 @@
   </style>
 </head>
 <body>
-  <header class="site-header site-header-dark">
-    <div class="container nav-wrapper">
-      <a class="logo" href="index.html" aria-label="首页">
-        <span class="logo-icon">AI</span>
-        <span class="logo-text">中小学人工智能与科技教育大会</span>
-      </a>
-      <nav class="main-nav" aria-label="主导航">
-        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="打开菜单">
-          <span></span><span></span><span></span>
-        </button>
-        <ul id="nav-menu" class="nav-menu">
-          <li><a href="index.html#about">大会简介</a></li>
-          <li class="has-dropdown">
-            <a href="current.html">本届大会</a>
-            <ul class="dropdown-menu">
-              <li><a href="current.html#overview">会议概况</a></li>
-              <li><a href="current.html#agenda">议程总览</a></li>
-              <li><a href="current.html#main-forum">主论坛</a></li>
-              <li><a href="current.html#forums">平行论坛</a></li>
-              <li><a href="current.html#workshops">专题工作坊</a></li>
-              <li><a href="current.html#closed">闭门会议</a></li>
-              <li><a href="current.html#map">会议地图</a></li>
-              <li><a href="current.html#organizers">组织架构</a></li>
-              <li><a href="current.html#register">报名须知</a></li>
-            </ul>
-          </li>
-          <li><a href="history.html">历届大会</a></li>
-          <li><a href="index.html#contact">联系我们</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
   <main>
     <section class="hero workshop-hero">
       <div class="container">
         <div class="hero-content">
           <p class="hero-label">2026 年 7 月 21 日 · 上海市实验学校嘉定新城分校</p>
-          <h1>第三届人工智能与科技教育大会<br>工作坊报名系统</h1>
+          <h1>“智教浦江 2026 ”人工智能教育实践创新论坛、<br>第三届中小学人工智能与科技教育大会<br>工作坊报名系统</h1>
           <p class="hero-subtitle">
             本次大会设置 37 个专题工作坊，分三个场次进行。每位参会者每场只能选择一个工作坊，
             请根据自身兴趣与时间安排合理选课。
@@ -666,31 +656,6 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Navigation toggle
-    const navToggle = document.querySelector('.nav-toggle');
-    const navMenu = document.getElementById('nav-menu');
-    navToggle.addEventListener('click', () => {
-      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
-      navToggle.setAttribute('aria-expanded', !expanded);
-      navMenu.classList.toggle('open');
-    });
-
-    document.querySelectorAll('.nav-menu a').forEach(link => {
-      link.addEventListener('click', () => {
-        navToggle.setAttribute('aria-expanded', 'false');
-        navMenu.classList.remove('open');
-      });
-    });
-
-    document.querySelectorAll('.has-dropdown > a').forEach(toggle => {
-      toggle.addEventListener('click', (e) => {
-        if (window.innerWidth < 900) {
-          e.preventDefault();
-          toggle.parentElement.classList.toggle('open');
-        }
-      });
-    });
 
     // Embedded workshop data from conference handbook
     const WORKSHOPS = [
