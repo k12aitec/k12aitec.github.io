@@ -641,8 +641,9 @@
             <input type="text" id="userName" class="form-control" placeholder="请输入姓名" required>
           </div>
           <div class="form-group">
-            <label for="userPhone">手机</label>
-            <input type="tel" id="userPhone" class="form-control" placeholder="请输入手机号" required>
+            <label for="userPhone">手机（后 4 位）</label>
+            <input type="tel" id="userPhone" class="form-control" placeholder="请输入手机后 4 位" maxlength="11" required>
+            <span class="hint">为便于核验，请输入报名手机号的最后 4 位。</span>
           </div>
           <div id="verifyStatus" class="status-message" style="display: none;"></div>
           <div class="modal-footer" style="padding: 1rem 0 0;">
@@ -1685,8 +1686,8 @@
 
       if (rememberedUser.name && rememberedUser.phone) {
         nameInput.value = rememberedUser.name;
-        phoneInput.value = rememberedUser.phone;
-        if (hint) hint.textContent = '已记住您的报名信息，请核对后提交。';
+        phoneInput.value = rememberedUser.phone.slice(-4);
+        if (hint) hint.textContent = '已记住您的报名信息，请核对后提交（手机仅显示后 4 位）。';
       } else {
         document.getElementById('verifyForm').reset();
         if (hint) hint.textContent = '请填写报名信息，系统将核验您是否在参会名单中。';
@@ -1713,8 +1714,8 @@
       const phone = document.getElementById('userPhone').value.trim();
       const submitBtn = e.target.querySelector('button[type="submit"]');
 
-      if (!/^1[3-9]\d{9}$/.test(phone)) {
-        showVerifyStatus('error', '请输入有效的 11 位手机号。');
+      if (!/^\d{4}$/.test(phone) && !/^1[3-9]\d{9}$/.test(phone)) {
+        showVerifyStatus('error', '请输入手机后 4 位。');
         return;
       }
 
@@ -1760,9 +1761,9 @@
           submittedSessions[session] = true;
           if (!existingUserSelections[phoneShort]) existingUserSelections[phoneShort] = {};
           existingUserSelections[phoneShort][session] = selections[session].id;
-          rememberedUser = { name, phone };
+          rememberedUser = { name, phone: phoneShort };
           localStorage.setItem('workshop_user_name', name);
-          localStorage.setItem('workshop_user_phone', phone);
+          localStorage.setItem('workshop_user_phone', phoneShort);
           showVerifyStatus('success', `第 ${session} 场选课提交成功！`);
           setTimeout(() => {
             closeModal('verifyModal');
