@@ -192,6 +192,16 @@ img {
   vertical-align: middle;
 }
 
+.has-dropdown::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 0.75rem;
+  background: transparent;
+}
+
 .dropdown-menu {
   display: none;
   margin: 0.25rem 0 0;
@@ -397,6 +407,26 @@ img {
     repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 30px);
 }
 
+.hero-history {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 50%, #fef3c7 100%);
+}
+
+.hero-history .hero-decoration {
+  background:
+    radial-gradient(circle at 20% 30%, rgba(245, 158, 11, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(249, 115, 22, 0.1) 0%, transparent 40%);
+}
+
+.hero-history .hero-label {
+  color: #92400e;
+  background: rgba(245, 158, 11, 0.12);
+}
+
+.hero-history h1,
+.hero-history .hero-subtitle {
+  color: #431407;
+}
+
 .hero-current h1,
 .hero-current .hero-subtitle {
   color: #fff;
@@ -548,6 +578,11 @@ img {
   margin: 0;
   font-size: 1.125rem;
   color: var(--color-text-light);
+}
+
+.section-cta {
+  text-align: center;
+  margin-top: 3rem;
 }
 
 /* About */
