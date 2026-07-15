@@ -150,6 +150,24 @@
       min-width: 8rem;
     }
 
+    .roster-area {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .roster-area h3 {
+      margin: 0 0 0.75rem;
+      font-size: 1.25rem;
+      color: #0f172a;
+    }
+
+    .roster-count {
+      margin: 0 0 1rem;
+      color: var(--color-text-light);
+      font-size: 0.9375rem;
+    }
+
     .btn-secondary {
       color: var(--color-text);
       background: #fff;
@@ -250,10 +268,26 @@
           <div class="import-actions">
             <button type="button" class="btn btn-secondary" id="previewBtn">解析预览</button>
             <button type="submit" class="btn btn-primary" id="submitBtn" disabled>提交名单</button>
+            <button type="button" class="btn btn-secondary" id="viewRosterBtn">查看名单</button>
           </div>
 
           <div id="statusMessage" class="status-message" style="display: none;"></div>
         </form>
+
+        <div id="rosterArea" class="roster-area" style="display: none;">
+          <h3>当前参会名单</h3>
+          <p id="rosterCount" class="roster-count"></p>
+          <table class="preview-table">
+            <thead>
+              <tr>
+                <th style="width: 3rem;">序号</th>
+                <th>姓名</th>
+                <th>手机</th>
+              </tr>
+            </thead>
+            <tbody id="rosterBody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </main>
@@ -293,6 +327,7 @@
     });
 
     const API_URL = 'https://qf.zmrobo.com/api/x5sz720ikv';
+    const API_LIST_URL = 'https://qf.zmrobo.com/api/x5sz720ikv/all';
     const batchInput = document.getElementById('batchInput');
     const previewBtn = document.getElementById('previewBtn');
     const submitBtn = document.getElementById('submitBtn');
@@ -302,6 +337,10 @@
     const previewInvalid = document.getElementById('previewInvalid');
     const statusMessage = document.getElementById('statusMessage');
     const importForm = document.getElementById('importForm');
+    const viewRosterBtn = document.getElementById('viewRosterBtn');
+    const rosterArea = document.getElementById('rosterArea');
+    const rosterBody = document.getElementById('rosterBody');
+    const rosterCount = document.getElementById('rosterCount');
 
     let parsedEntries = [];
 
@@ -435,6 +474,48 @@
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = '提交名单';
+      }
+    });
+
+    viewRosterBtn.addEventListener('click', async () => {
+      viewRosterBtn.disabled = true;
+      viewRosterBtn.textContent = '加载中…';
+      hideStatus();
+
+      try {
+        const response = await fetch(API_LIST_URL, { method: 'GET' });
+        if (!response.ok) {
+          throw new Error(`服务器返回 ${response.status}`);
+        }
+        const data = await response.json();
+
+        // The endpoint groups entries under submissions
+        const submissions = Array.isArray(data)
+          ? data
+          : (Array.isArray(data.submissions) ? data.submissions : []);
+        const entries = submissions.flatMap(item =>
+          Array.isArray(item.entries) ? item.entries : [item]
+        ).filter(e => e && (e.name || e.phone));
+
+        rosterBody.innerHTML = '';
+        entries.forEach((entry, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${entry.name || '-'}</td>
+            <td>${entry.phone || '-'}</td>
+          `;
+          rosterBody.appendChild(row);
+        });
+
+        rosterCount.textContent = `共 ${entries.length} 条记录`;
+        rosterArea.style.display = 'block';
+        rosterArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (err) {
+        showStatus('error', `名单加载失败：${err.message}`);
+      } finally {
+        viewRosterBtn.disabled = false;
+        viewRosterBtn.textContent = '查看名单';
       }
     });
   </script>
